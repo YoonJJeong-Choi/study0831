@@ -32,12 +32,16 @@ public class BoardApiController {
     }
 
     @DeleteMapping("{no}")
-    public void delete(@PathVariable Long no){
-        boardService.delete(no);
+    public void delete(@PathVariable Long no, HttpSession session){
+        MemberDto loginMemberDto = (MemberDto) session.getAttribute("loginMemberDto");
+        Long writerNo = loginMemberDto.getNo();
+        boardService.delete(no, writerNo);
     }
 
     @PutMapping
-    public void update(@RequestBody BoardDto dto){
-        boardService.update(dto);
+    public void update(@RequestBody BoardDto dto, HttpSession session){
+        MemberDto loginMemberDto = (MemberDto) session.getAttribute("loginMemberDto");
+        Long writerNo = loginMemberDto.getNo();
+        boardService.update(dto,writerNo);
     }
 }

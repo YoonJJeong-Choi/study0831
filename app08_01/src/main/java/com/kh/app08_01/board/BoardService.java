@@ -33,13 +33,19 @@ public class BoardService {
         return entityList.stream().map(BoardDto::from).toList();
     }
 
-    public void delete(Long no) {
+    public void delete(Long no, Long loginMemberNo) {
         BoardEntity entity = boardRepository.findBoardByNo(no);
+    if (entity.getWriter().getNo() != loginMemberNo){
+        throw new BoardException("[board-001]");
+    }
         entity.delete();
     }
 
-    public void update(BoardDto dto) {
+    public void update(BoardDto dto, Long loginMemberNo) {
         BoardEntity entity = boardRepository.findBoardByNo(dto.getNo());
+        if(entity.getWriter().getNo() != loginMemberNo){
+            throw new BoardException("[board-002]");
+        }
         entity.update(dto);
     }
 }
